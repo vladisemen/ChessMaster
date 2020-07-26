@@ -1,0 +1,12 @@
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.csprojAssemblyReference.cache
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.ChessForm.resources
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.Form1.resources
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.Properties.Resources.resources
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.csproj.GenerateResource.cache
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\bin\Debug\ChessMaster.exe.config
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\bin\Debug\ChessMaster.exe
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\bin\Debug\ChessMaster.pdb
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.exe
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.pdb
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.Form2.resources
+D:\ПРОГРАММЫ\ChessMaster\ChessMaster\obj\Debug\ChessMaster.FormGame.resources
