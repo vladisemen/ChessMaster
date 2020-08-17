@@ -17,7 +17,11 @@ namespace ChessMaster
         private List<Button> buttons = new List<Button>();// создаем массив кнопок
         private string path; // ссылка на картинку
         private ChessBoard _chessBoard; // наша доска
-        private bool b_AF = false; // фигура не выбрана
+        Field Field_Global;
+
+        /// <summary>
+        /// выбрана ли фигура
+        /// </summary>
 
         public ChessForm()
         {
@@ -33,41 +37,10 @@ namespace ChessMaster
             var field = pO as Field; // это поле
             int x_t = field.Position.X; // позиция фигуры 
             int y_t = field.Position.Y;// позиция фигуры
-            ArrayList Arr = null;
-            EChessColor eChessColor = field.Figure.Color; // запомнили цвет фигуры для отправки в класс
-            if (field.Figure is TureChessFigure)
+            ArrayList A_possible_move = _chessBoard.h_possible_move(field);
+            if (A_possible_move != null) // если массив не пуст, то показываем возможные ходы
             {
-                var Field1 = field.Figure as TureChessFigure; // ладья 
-                Arr = Field1.Hod(x_t, y_t, _chessBoard.Fields, eChessColor); // все возможные ходы ладьи
-            }
-            else if (field.Figure is BishopChessFigure)
-            {
-                var Field1 = field.Figure as BishopChessFigure; // слон 
-                Arr = Field1.Hod(x_t, y_t, _chessBoard.Fields,eChessColor); // все возможные ходы слона
-            }
-            else if (field.Figure is KingChessFigure)
-            {
-                var Field1 = field.Figure as KingChessFigure; // король 
-                Arr = Field1.KingHod(x_t, y_t); // все возможные ходы короля
-            }
-            else if (field.Figure is QueenChessFigure)
-            {
-                var Field1 = field.Figure as QueenChessFigure; // ферзь 
-                Arr = Field1.Hod(x_t, y_t, _chessBoard.Fields,eChessColor); // все возможные ходы ферзя
-            }
-            else if (field.Figure is HorseChessFigure)
-            {
-                var Field1 = field.Figure as HorseChessFigure; // конь 
-                Arr = Field1.HorseHod(x_t, y_t); // все возможные ходы коня
-            }
-            else if (field.Figure is SimpleChessFigure)
-            {
-                var Field1 = field.Figure as SimpleChessFigure; // пешка 
-                Arr = Field1.SimpleHod(x_t, y_t, Field1.Color); // все возможные ходы пешки
-            }
-            if (Arr != null) // если массив не пуст, то показываем возможные ходы
-            {
-                _chessBoard.FieldActive(Arr);
+                _chessBoard.FieldActive(A_possible_move);
                 foreach (var field1 in _chessBoard.Fields)
                 {
                     if (field1.Active)
@@ -76,7 +49,6 @@ namespace ChessMaster
                         int y = field1.Position.Y;
                         int rrr = ChessFigure.coords_to_position(x, y); // вызываем статический метод 
                         buttons[rrr].BackColor = Color.Blue;
-
                     }
                 }
             }
@@ -133,17 +105,64 @@ namespace ChessMaster
         private void h_onPBOnClick(object sender, EventArgs args)
         {
             Button btn = (sender as Button);
-            //здесь проверка на то выбрана ли фигура для хода!!!
-            if (b_AF)//фигура выбрана
+            var pO = btn.Tag;
+            var field = pO as Field; // это поле
+            //здесь проверка на то, какая позиция на доске
+            switch (_chessBoard.GameProperty)
             {
+                //Выбор фигуры для белых
+                case EGameProperty.WhiteHod:
+                    if (field.Figure == null)
+                    {
+                        return;
+                    }
+                    if (field.Figure.Color == EChessColor.White)
+                    {
+                        h_hod(btn);
+                        Field_Global = (Field)field.Clone(); // КЛОНИРУЕМ ОБЪЕКТ!!!
+                        _chessBoard.GameProperty = EGameProperty.WhiteHodCheck;
+                    }
+                    else return;
+                    break;
+                //Сам ход белых
+                case EGameProperty.WhiteHodCheck:
+                    if (field.Active)
+                    {
+                        int coord = ChessFigure.coords_to_position(Field_Global.Position.X, Field_Global.Position.Y);
+                        buttons[coord].BackgroundImage = null;
+                        _chessBoard.Fields[coord].Figure = null;
 
-            }
-            else // фигура не выбрана
-            {
-                
-                h_hod(btn);
-            }
+                        field.Figure = Field_Global.Figure;
 
+
+                        coord = ChessFigure.coords_to_position(field.Position.X, field.Position.Y);
+
+                        path = _chessBoard.h_image(Field_Global.Figure); // ищем нужную ссылку на картинку
+
+                        _chessBoard.Fields[coord].Figure = Field_Global.Figure;
+                        buttons[coord].BackgroundImage = Image.FromFile(path, false);
+                        buttons[coord].BackgroundImageLayout = ImageLayout.Center;
+                        _chessBoard.GameProperty = EGameProperty.BlackHod;
+                    }
+                    break;
+                //Выбор фигуры для черных
+                case EGameProperty.BlackHod:
+                    h_hod(btn);
+                    _chessBoard.GameProperty = EGameProperty.BlackHodCheck;
+                    break;
+                //Сам ход черных
+                case EGameProperty.BlackHodCheck:
+                    break;
+
+                case EGameProperty.CheckWhite:
+                    break;
+                case EGameProperty.CheckBlack:
+                    break;
+                case EGameProperty.EndGame:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

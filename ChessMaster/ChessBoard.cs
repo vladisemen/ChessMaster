@@ -7,6 +7,7 @@ using System.Collections.Generic;
 /*
  * Шахматы
  *  1. Шахматная доска
+ *      -активность игры
  *      -[] полей
  *      2. Поле шахмотной доски
  *        - активность
@@ -33,7 +34,12 @@ namespace ChessMaster
         public const int Width = 8;
         public const int Height = 8;
 
+
         public List<Field> Fields { get; }
+
+        /// <summary>
+        /// Положение игры
+        /// </summary>
         public EGameProperty GameProperty { get; set; }
 
         #endregion
@@ -324,6 +330,88 @@ namespace ChessMaster
             {
                 field.Figure = null;
             }
+        }
+
+        /// <summary>
+        ///  получаем массив ходов этой фигуры
+        /// </summary>
+        /// <returns></returns>
+        public ArrayList h_possible_move(Field field)
+        {
+            ArrayList A_possible_move = null;
+            int x_t = field.Position.X; // позиция фигуры 
+            int y_t = field.Position.Y;// позиция фигуры
+            EChessColor eChessColor = field.Figure.Color; // запомнили цвет фигуры для отправки в класс
+            if (field.Figure is TureChessFigure)
+            {
+                var Field1 = field.Figure as TureChessFigure; // ладья 
+                A_possible_move = Field1.Hod(x_t, y_t, Fields, eChessColor); // все возможные ходы ладьи
+            }
+            else if (field.Figure is BishopChessFigure)
+            {
+                var Field1 = field.Figure as BishopChessFigure; // слон 
+                A_possible_move = Field1.Hod(x_t, y_t, Fields, eChessColor); // все возможные ходы слона
+            }
+            else if (field.Figure is KingChessFigure)
+            {
+                var Field1 = field.Figure as KingChessFigure; // король 
+                A_possible_move = Field1.KingHod(x_t, y_t); // все возможные ходы короля
+            }
+            else if (field.Figure is QueenChessFigure)
+            {
+                var Field1 = field.Figure as QueenChessFigure; // ферзь 
+                A_possible_move = Field1.Hod(x_t, y_t, Fields, eChessColor); // все возможные ходы ферзя
+            }
+            else if (field.Figure is HorseChessFigure)
+            {
+                var Field1 = field.Figure as HorseChessFigure; // конь 
+                A_possible_move = Field1.Hod(x_t, y_t, Fields, eChessColor); // все возможные ходы коня
+            }
+            else if (field.Figure is SimpleChessFigure)
+            {
+                var Field1 = field.Figure as SimpleChessFigure; // пешка 
+                A_possible_move = Field1.SimpleHod(x_t, y_t, Field1.Color); // все возможные ходы пешки
+            }
+            return A_possible_move;
+        }
+
+        /// <summary>
+        /// проверка на шах 1 фигуры
+        /// </summary>
+        /// <param name="Arr"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public bool FieldHaveKing(ArrayList Arr, EChessColor color)
+        {
+            foreach (int s in Arr)
+            {
+                if (Fields[s].Figure is KingChessFigure&& Fields[s].Figure.Color ==color) //если король нужного цвета
+                {
+                    return true;
+                }            
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// проверка на шах
+        /// </summary>
+        public bool h_Check_King(EChessColor color)
+        {
+            bool b_King = false;
+            foreach (var field in Fields)
+            {
+                if (field.Figure==null || field.Figure is KingChessFigure)
+                {
+                    continue;
+                }
+                ArrayList A_possible_move = h_possible_move(field);
+                if (A_possible_move != null) // если массив не пуст, то показываем возможные ходы
+                {
+                  b_King=  FieldHaveKing(A_possible_move, color);
+                }
+            }
+            return b_King;
         }
     }
 

@@ -66,7 +66,7 @@ namespace ChessMaster
             else if (field.Figure is HorseChessFigure)
             {
                 var Field1 = field.Figure as HorseChessFigure; // конь 
-                Arr = Field1.HorseHod(x_t, y_t); // все возможные ходы коня
+                Arr = Field1.Hod(x_t, y_t, _chessBoard.Fields, Field1.Color); // все возможные ходы коня
             }
             else if (field.Figure is SimpleChessFigure)
             {
@@ -317,5 +317,21 @@ namespace ChessMaster
             btn.BackgroundImageLayout = ImageLayout.Center;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (_chessBoard.h_Check_King(EChessColor.Black))
+            {
+                label1.Text = "шах черным";
+            }
+            else
+            if (_chessBoard.h_Check_King(EChessColor.White))
+            {
+                label1.Text = "шах белым";
+            }
+            else
+            {
+                label1.Text = "никому не шах";
+            }
+        }
     }
 }

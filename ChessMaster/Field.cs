@@ -7,9 +7,24 @@ using System.Threading.Tasks;
 
 namespace ChessMaster
 {
+    /// <summary>
+    /// интерфейс для клонирования объектов
+    /// </summary>
+    public interface ICloneable
+    {
+        object Clone();
+    }
     public class Field
     {
-        
+        /// <summary>
+        /// метод для клонирования объекта
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
         #region public properties
 
         /// <summary>

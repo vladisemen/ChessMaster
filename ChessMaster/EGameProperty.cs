@@ -16,9 +16,25 @@ namespace ChessMaster
         /// </summary>
         WhiteHod,
         /// <summary>
+        /// выбрана фигура для хода
+        /// </summary>
+        WhiteHodCheck,
+        /// <summary>
         /// ход черных
         /// </summary>
         BlackHod,
+        /// <summary>
+        /// выбрана фигура для хода
+        /// </summary>
+        BlackHodCheck,
+        /// <summary>
+        /// шах белым
+        /// </summary>
+        CheckWhite,
+        /// <summary>
+        /// шах черным
+        /// </summary>
+        CheckBlack,
         /// <summary>
         /// конец игры
         /// </summary>
